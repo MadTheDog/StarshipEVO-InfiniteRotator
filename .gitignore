@@ -1,0 +1,20 @@
+**/bin/
+**/obj/
+dist/
+.build-home/
+.packages/
+.vs/
+*.user
+*.suo
+# Never commit proprietary game/loader binaries, evidence, profiles or saves.
+*.dll
+*.exe
+*.zip
+*.assets
+*.resS
+*.resource
+*.bundle
+*.log
+local-evidence/
+test-install/
+test-profile/
