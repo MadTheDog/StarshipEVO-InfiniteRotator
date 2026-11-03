@@ -4,7 +4,7 @@
 
 ## Short introduction
 
-Adds a separate upright rotator to Starship EVO that keeps spinning in either direction. It uses the original rotator shape, with a paintable base and a white spinning top to distinguish it from the black vanilla top.
+Adds a separate rotator to Starship EVO that keeps spinning in either direction. It uses the original rotator shape, with a paintable base and a white spinning top to distinguish it from the black vanilla top.
 
 ---
 
