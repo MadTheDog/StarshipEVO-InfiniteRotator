@@ -43,6 +43,38 @@ namespace InfiniteRotator
             if (!onLoad) brickCoord.Parent.BrickCount.SetDefaultLabel(brickCoord, "Infinite Rotator");
         }
 
+        protected override void InitChildrenTransform()
+        {
+            base.InitChildrenTransform();
+
+            // Native placement adds the top before this hook. Native loading
+            // registers saved child bricks before reconnecting their controller.
+            var child = ChildrenEntity;
+            var bricks = child.Bricks;
+            var top = bricks.GetBrickData(1);
+            if (top.brickId == TabMechanism.ROTATOR_TOP.brickID)
+            {
+                // Upgrade the existing child in place, preserving its instance ID,
+                // attached construction and mechanism storage connection.
+                var coord = new BrickCoord { entityID = child.ID, brickData = top };
+                child.Parent.BrickCount.SetCountForBrickId(coord, -1);
+                top.brickId = Plugin.TopId;
+                coord.brickData = top;
+                child.Parent.BrickCount.SetCountForBrickId(coord, 1);
+
+                var ids = bricks.GetBrickIds(top.instanceId);
+                Brick.ReleaseRenderData(GlobalRenderer.renderer, ids);
+                ids.renderId1 = ids.renderId2 = ids.renderId3 = 0;
+                top.color = InfiniteRotorTop.White;
+                top.Brick.RegisterRenderData(top, GlobalRenderer.renderer, child.transformId, ref ids);
+                bricks.UpdateIds(ids, top.instanceId);
+            }
+            else if (top.brickId != Plugin.TopId || top.color.Equals(InfiniteRotorTop.White)) return;
+
+            top.color = InfiniteRotorTop.White;
+            bricks.Update(top);
+        }
+
         private void SetNativeSpeed()
         {
             var native = saveData;
