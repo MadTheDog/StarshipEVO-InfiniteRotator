@@ -23,7 +23,7 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 ### What was tested
 
 - Basic placement, continuous rotation and base painting in a disposable single-player installation. The white-top revision loaded in the same test copy.
-- An earlier build ran for about **7½ hours** in a world with four Infinite Rotators. At comparable workloads, frame times stayed near **11.3 ms** **(88,5 FPS)** and memory showed no sustained growth. Some removed rotor references remained alive after stock machinery unloaded. Cleanup still needs a controlled test.
+- An earlier build ran for about **7½ hours** in a world with four Infinite Rotators. At comparable workloads, frame times stayed near **11.3 ms** **(88,5 FPS)** and memory showed no sustained growth.
 - Testing was limited to a few setups. Save and blueprint round trips, multiplayer and high rotor counts still need testing. Native Event Gates linked to the mod can log a lookup error, including when loading a world.
 
 ---
