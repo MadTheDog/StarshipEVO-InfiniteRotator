@@ -5,16 +5,18 @@ using VoxelEngine;
 
 namespace InfiniteRotator
 {
-    // Only these private members are used; startup checks the inspected assembly before patching.
+    // Only bind private accessors after the shared lifecycle contract has passed.
     internal static class NativeMovement
     {
-        private static readonly AccessTools.FieldRef<ChildrenEntitySystem, bool> running =
-            AccessTools.FieldRefAccess<ChildrenEntitySystem, bool>("isRunning");
-        private static readonly AccessTools.FieldRef<ChildrenEntitySystem, float> previous =
-            AccessTools.FieldRefAccess<ChildrenEntitySystem, float>("prevState");
-        private static readonly MethodInfo stop = AccessTools.Method(typeof(ChildrenEntitySystem), "StopMovement");
+        private static AccessTools.FieldRef<ChildrenEntitySystem, bool> running;
+        private static AccessTools.FieldRef<ChildrenEntitySystem, float> previous;
+        private static MethodInfo stop;
         internal static void Validate()
         {
+            running = AccessTools.FieldRefAccess<ChildrenEntitySystem, bool>("isRunning");
+            previous = AccessTools.FieldRefAccess<ChildrenEntitySystem, float>("prevState");
+            stop = typeof(ChildrenEntitySystem).GetMethod("StopMovement", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                null, Type.EmptyTypes, null);
             if (stop == null || running == null || previous == null)
                 throw new MissingMemberException("Native mechanism lifecycle does not match this draft.");
         }

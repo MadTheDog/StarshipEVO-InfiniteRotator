@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net8.0</TargetFramework><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/GameContract.cs" Link="GameContract.cs" />
+    <Compile Include="../../src/NativeLifecyclePatterns.cs" Link="NativeLifecyclePatterns.cs" />
+    <Compile Remove="ReflectionProbe.cs" />
+    <Reference Include="Mono.Cecil"><HintPath>$(CecilPath)</HintPath></Reference>
+  </ItemGroup>
+</Project>

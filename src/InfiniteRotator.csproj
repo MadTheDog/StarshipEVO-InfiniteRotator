@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework><LangVersion>latest</LangVersion>
-    <AssemblyName>InfiniteRotator</AssemblyName><Version>0.1.0</Version>
+    <TargetFramework Condition="'$(TargetFramework)'==''">netstandard2.1</TargetFramework><LangVersion>latest</LangVersion>
+    <AssemblyName>InfiniteRotator</AssemblyName><Version>0.1.1</Version>
     <GameDir Condition="'$(GameDir)'==''">C:\Program Files (x86)\Steam\steamapps\common\Starship EVO</GameDir>
     <ManagedDir>$(GameDir)\Starship EVO_Data\Managed</ManagedDir>
     <LoaderDir Condition="'$(LoaderDir)'==''">$(GameDir)\BepInEx\core</LoaderDir>
@@ -14,6 +14,7 @@
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(ManagedDir)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Unity.Collections"><HintPath>$(ManagedDir)\Unity.Collections.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Unity.Mathematics"><HintPath>$(ManagedDir)\Unity.Mathematics.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.MathematicsModule" Condition="Exists('$(ManagedDir)\UnityEngine.MathematicsModule.dll')"><HintPath>$(ManagedDir)\UnityEngine.MathematicsModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Mirror"><HintPath>$(ManagedDir)\Mirror.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MessagePack"><HintPath>$(ManagedDir)\MessagePack.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MessagePack.Annotations"><HintPath>$(ManagedDir)\MessagePack.Annotations.dll</HintPath><Private>false</Private></Reference>

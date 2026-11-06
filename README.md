@@ -1,4 +1,6 @@
-# Infinite Rotator v0.1.0
+# Infinite Rotator v0.1.1 candidate
+
+This compatibility update is an unreleased candidate. It has been compiled and checked against **Steam build 26451593 / 26w45a (Unity 6)**. In-game acceptance of this candidate is still pending. The existing v0.1.0 release and rollback files are preserved.
 
 ---
 
@@ -22,6 +24,7 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 
 ### What was tested
 
+- Candidate v0.1.1: contract and mutation checks against the installed Unity 6 game and the preserved Unity 2019 assembly, plus standalone Mono reflection probes and rotation/save policy tests. These checks do not launch or play the game. See [compatibility details](COMPATIBILITY.md).
 - Basic placement, continuous rotation and base painting in a disposable single-player installation. The white-top revision loaded in the same test copy.
 - An earlier build ran for about **7½ hours** in a world with four Infinite Rotators. At comparable workloads, frame times stayed near **11.3 ms** **(88,5 FPS)** and memory showed no sustained growth.
 - Testing was limited to a few setups. Save and blueprint round trips, multiplayer and high rotor counts still need testing. Native Event Gates linked to the mod can log a lookup error, including when loading a world.
@@ -30,7 +33,9 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 
 ## Installation requirements
 
-- **Starship EVO Early Access 26w43a**, Steam build **26122752**, Unity **2019.4.30f1**. This is the tested and supported game build. The plugin checks the game assembly at startup and disables itself on other builds.
+- Latest candidate target: **Starship EVO 26w45a**, Steam build **26451593**, Unity **6000.6.6f1**, Steam's **unity6** branch. The default build targets .NET Standard 2.1. Runtime acceptance is pending.
+- An older-target candidate can be built with `-Framework netstandard2.0` against the preserved Steam build **26122752**, Unity **2019.4.30f1**. Its older year-week label was not independently reverified in this maintenance pass. Earlier gameplay observations below belong to that older game and mod, not to a new Unity 6 acceptance test.
+- Future builds are checked against the required native movement/save/resource contracts. A different build ID, MVID or assembly hash alone does not disable the mod. A changed required contract disables registration and leaves vanilla behavior in place. A missing optional white-top surface falls back to the stock appearance.
 - **64-bit Windows** and **BepInEx 5 for Windows x64**. Tested with [BepInEx 5.4.23.5](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5).
 
 ---
@@ -47,7 +52,7 @@ The game reduces speed under load and can stop the rotator on contact or overloa
    HideManagerGameObject = true
    ```
 
-5. Download **InfiniteRotator-v0.1.0.zip** from the release's **Assets**. The auto-generated source ZIP does not contain the plugin. [Releases](../../releases)
+5. For this unreleased candidate, build from source as described below. The build script produces `InfiniteRotator-v0.1.1-candidate-netstandard2.1.zip`. The existing v0.1.0 release predates Unity 6 support; it is not this candidate. The auto-generated source ZIP does not contain a compiled plugin. [Releases](../../releases)
 6. Extract the ZIP's `BepInEx` folder into the game folder. The files should land here.
 
    ```text
@@ -78,6 +83,7 @@ To update, close the game and replace `BepInEx/plugins/InfiniteRotator/InfiniteR
 - The initial release adds the upright rotator. Vanilla rotators and hinges retain their original controls.
 - Unofficial mod, unaffiliated with Moonfire Entertainment.
 - To build from source, install the .NET 8 SDK and run `./Build.ps1 -GameDir "<your Starship EVO folder>"`. The script uses BepInEx references from that installation and packages the DLL. Pass `-LoaderDir` if your loader references live elsewhere.
+- Keep the Unity 6 and older-target packages separate. Use only one plugin DLL in the installation. No collision optimization experiments are included in this compatibility candidate, and no performance gain or leak-free guarantee is claimed.
 
 ---
 

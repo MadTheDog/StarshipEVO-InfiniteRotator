@@ -1,4 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><TargetFramework>net8.0</TargetFramework><OutputType>Exe</OutputType></PropertyGroup>
-  <ItemGroup><Compile Include="../src/SpinPolicy.cs" Link="SpinPolicy.cs" /></ItemGroup>
+  <ItemGroup><Compile Remove="Compatibility/**/*.cs" /><Compile Include="../src/SpinPolicy.cs" Link="SpinPolicy.cs" /></ItemGroup>
 </Project>

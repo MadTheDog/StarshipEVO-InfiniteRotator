@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -10,11 +11,10 @@ using VoxelEngine;
 
 namespace InfiniteRotator
 {
-    [BepInPlugin(Id, "Infinite Rotator (draft)", "0.1.0")]
+    [BepInPlugin(Id, "Infinite Rotator (candidate)", "0.1.1")]
     public sealed class Plugin : BaseUnityPlugin
     {
         public const string Id = "local.sevo.infiniterotator";
-        private const string SupportedHash = "2F5C2A843EF1698DC814FC096E2F6C9DF44C126F24601269CB294D0C0B0867AF";
         internal static ManualLogSource Log;
         private static int blockId;
         // The runtime loader identifies stock materials by load order, not by texture path.
@@ -25,6 +25,8 @@ namespace InfiniteRotator
         internal static ushort TopId => (ushort)registeredTop.brickID;
         private static bool registrationFailed;
         private Harmony harmony;
+        internal static bool WhiteTopAvailable;
+        internal static VoxelMaterial[] WhiteTopMaterials;
 
         private void Awake()
         {
@@ -33,15 +35,16 @@ namespace InfiniteRotator
                 "Stable custom ID, 1-1023. Never change for an existing world. Occupied IDs disable the block.").Value;
             try
             {
-                string hash;
-                using (var stream = File.OpenRead(typeof(Brick).Assembly.Location))
-                using (var sha = SHA256.Create())
-                    hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
-                if (hash != SupportedHash)
-                    throw new NotSupportedException("This draft requires SEVO build 26122752 (inspected Assembly-CSharp hash).");
+                LogIdentity();
+                var failures = GameContract.Validate(new ReflectionContractView(typeof(Brick).Assembly));
+                if (failures.Count != 0)
+                    throw new NotSupportedException("Required movement/save/resource contracts changed: " + string.Join("; ", failures));
                 NativeMovement.Validate();
                 harmony = new Harmony(Id);
-                harmony.PatchAll(typeof(Plugin).Assembly);
+                // Experimental collision instrumentation is not part of this candidate.
+                harmony.CreateClassProcessor(typeof(RotorMaterialPatch)).Patch();
+                harmony.CreateClassProcessor(typeof(RegisterBlockPatch)).Patch();
+                harmony.CreateClassProcessor(typeof(ContinuousMovementPatch)).Patch();
                 Logger.LogInfo("Infinite Rotator draft loaded. Block registration waits for native resource loading. No hot unload support.");
             }
             catch (Exception error)
@@ -51,9 +54,58 @@ namespace InfiniteRotator
             }
         }
 
+        private void LogIdentity()
+        {
+            // Failure to read diagnostics must never reject compatible game contracts.
+            try
+            {
+                var assembly = typeof(Brick).Assembly;
+                string hash;
+                using (var stream = File.OpenRead(assembly.Location))
+                using (var sha = SHA256.Create())
+                    hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
+                Log.LogInfo("Game diagnostics: Unity=" + Application.unityVersion + " MVID="
+                    + assembly.ManifestModule.ModuleVersionId + " SHA256=" + hash);
+            }
+            catch (Exception error) { Log.LogWarning("Game identity diagnostics unavailable: " + error.Message); }
+        }
+
         internal static void Register()
         {
             if (registrationFailed) return;
+            try { RegisterCore(); }
+            catch (Exception error)
+            {
+                registrationFailed = true;
+                if (registered != null && ReferenceEquals(Brick.BRICK_INDEX[blockId], registered)) Brick.BRICK_INDEX[blockId] = null;
+                if (registeredTop != null && ReferenceEquals(Brick.BRICK_INDEX[registeredTop.brickID], registeredTop))
+                    Brick.BRICK_INDEX[registeredTop.brickID] = null;
+                Log.LogError("Infinite Rotator registration disabled; stock definitions retained: " + error);
+            }
+        }
+
+        private static void RegisterCore()
+        {
+            if (registrationFailed) return;
+            // Resolve actual loaded stock resources, not filenames or material slot numbers.
+            var stockRotor = TabMechanism.ROTATOR;
+            var stockTop = TabMechanism.ROTATOR_TOP;
+            if (stockRotor == null || stockTop == null || string.IsNullOrEmpty(stockRotor.nameMesh)
+                || string.IsNullOrEmpty(stockTop.nameMesh) || stockRotor.VoxelMaterials == null
+                || stockRotor.VoxelMaterials.Length == 0 || stockTop.VoxelMaterials == null
+                || stockTop.VoxelMaterials.Length == 0 || Brick.BRICK_INDEX == null || Brick.BRICK_INDEX.Length != 1024)
+                throw new NotSupportedException("Stock rotor mesh/material or 10-bit brick registry contract unavailable.");
+            WhiteTopMaterials = null;
+            try
+            {
+                var hullType = typeof(Brick).Assembly.GetType("VoxelEngine.TabHull", false);
+                var hull = hullType?.GetField("HULL_A", BindingFlags.Public | BindingFlags.Static)?.GetValue(null) as Brick;
+                if (hull?.VoxelMaterials != null && hull.VoxelMaterials.Length > 0)
+                    WhiteTopMaterials = new[] { hull.VoxelMaterials[0] };
+            }
+            catch (Exception error) { Log.LogWarning("White top surface discovery failed: " + error.Message); }
+            WhiteTopAvailable = WhiteTopMaterials != null;
+            if (!WhiteTopAvailable) Log.LogWarning("White top surface unavailable; using stock top material. Rotation remains available.");
             if (registered != null)
             {
                 if (!ReferenceEquals(Brick.BRICK_INDEX[blockId], registered)
@@ -141,7 +193,7 @@ namespace InfiniteRotator
         internal void LoadAfterStock() => base.LoadResourcesRuntime();
     }
 
-    [HarmonyPatch(typeof(VoxelMaterial), nameof(VoxelMaterial.CreateFaceIDArrayRuntime))]
+    [HarmonyPatch(typeof(VoxelMaterial), nameof(VoxelMaterial.CreateFaceIDArrayRuntime), new[] { typeof(object[]) })]
     internal static class RotorMaterialPatch
     {
         private static bool Prefix(object[] __0, ref VoxelMaterial[] __result)
@@ -150,7 +202,7 @@ namespace InfiniteRotator
             {
                 // White paint alone leaves the stock top black. Use the game's
                 // paintable hull surface on the original top mesh.
-                __result = new[] { TabHull.HULL_A.VoxelMaterials[0] };
+                __result = Plugin.WhiteTopAvailable ? Plugin.WhiteTopMaterials : TabMechanism.ROTATOR_TOP.VoxelMaterials;
                 return false;
             }
             if (!ReferenceEquals(__0, Plugin.RotorMaterialArgs)) return true;
@@ -161,13 +213,13 @@ namespace InfiniteRotator
         }
     }
 
-    [HarmonyPatch(typeof(Brick), nameof(Brick.LoadAllResourcesRuntime))]
+    [HarmonyPatch(typeof(Brick), nameof(Brick.LoadAllResourcesRuntime), new Type[0])]
     internal static class RegisterBlockPatch
     {
         private static void Postfix() => Plugin.Register();
     }
 
-    [HarmonyPatch(typeof(ChildrenEntitySystem), nameof(ChildrenEntitySystem.UpdateTransform))]
+    [HarmonyPatch(typeof(ChildrenEntitySystem), nameof(ChildrenEntitySystem.UpdateTransform), new Type[0])]
     internal static class ContinuousMovementPatch
     {
         private static bool Prefix(ChildrenEntitySystem __instance)
