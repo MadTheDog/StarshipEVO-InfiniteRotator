@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "local.sevo.infiniterotator",
+  "name": "Infinite Rotator",
+  "version": "0.1.2",
+  "payloadRoot": "payload",
+  "repository": "MadTheDog/StarshipEVO-InfiniteRotator",
+  "assetName": "InfiniteRotator-v0.1.2-uplink.zip",
+  "dependencies": {},
+  "conflicts": [],
+  "fixedBrickIds": [],
+  "fixedShapeIds": []
+}

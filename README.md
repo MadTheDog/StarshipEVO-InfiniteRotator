@@ -1,6 +1,6 @@
-# Infinite Rotator v0.1.1 candidate
+# Infinite Rotator v0.1.2
 
-This compatibility update is an unreleased candidate. It has been compiled and checked against **Steam build 26451593 / 26w45a (Unity 6)**. In-game acceptance of this candidate is still pending. The existing v0.1.0 release and rollback files are preserved.
+The Unity 6 build provides a native Starship Uplink package. The validation target is **Steam build 26451593 / 26w45a**, **Uplink 0.1.2** and **Keel 0.1.0**. See [compatibility details](COMPATIBILITY.md).
 
 ---
 
@@ -33,14 +33,21 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 
 ## Installation requirements
 
-- Latest candidate target: **Starship EVO 26w45a**, Steam build **26451593**, Unity **6000.6.6f1**, Steam's **unity6** branch. The default build targets .NET Standard 2.1. Runtime acceptance is pending.
+- **Starship EVO 26w45a**, Steam build **26451593**, Unity **6000.6.6f1**, Steam's **unity6** branch. The default build targets .NET Standard 2.1.
 - An older-target candidate can be built with `-Framework netstandard2.0` against the preserved Steam build **26122752**, Unity **2019.4.30f1**. Its older year-week label was not independently reverified in this maintenance pass. Earlier gameplay observations below belong to that older game and mod, not to a new Unity 6 acceptance test.
 - Future builds are checked against the required native movement/save/resource contracts. A different build ID, MVID or assembly hash alone does not disable the mod. A changed required contract disables registration and leaves vanilla behavior in place. A missing optional white-top surface falls back to the stock appearance.
 - **64-bit Windows** and **BepInEx 5 for Windows x64**. Tested with [BepInEx 5.4.23.5](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5).
 
 ---
 
-## How to install
+## Install with Uplink
+
+1. Close Starship EVO. Select a profile for the Unity 6 game and prepare its runtime in [Starship Uplink](https://github.com/MadTheDog/Starship-Uplink/releases/tag/v0.1.2). Uplink supplies BepInEx and [Starship Keel](https://github.com/MadTheDog/Starship-Keel/releases/tag/v0.1.0).
+2. Build the mod with `./Build.ps1 -GameDir "<your Starship EVO folder>"` or use a compiled `InfiniteRotator-v0.1.2-uplink.zip`. Use Uplink's ZIP import to add the package, then install **Infinite Rotator 0.1.2** in the selected profile.
+3. For an upgrade from a manual installation, remove the older DLL from `BepInEx/plugins/InfiniteRotator/` while the game is closed. Keep `BepInEx/config/local.sevo.infiniterotator.cfg` and its existing brick ID.
+4. Launch from Uplink and look under **Mechanisms**. Keel's default audit mode is sufficient.
+
+## Manual installation
 
 1. Close Starship EVO and back up any world you plan to use. Try a fresh Creative world first.
 2. In Steam, open **Starship EVO → Manage → Browse local files**. This is the folder containing `Starship EVO.exe`.
@@ -52,8 +59,8 @@ The game reduces speed under load and can stop the rotator on contact or overloa
    HideManagerGameObject = true
    ```
 
-5. For this unreleased candidate, build from source as described below. The build script produces `InfiniteRotator-v0.1.1-candidate-netstandard2.1.zip`. The existing v0.1.0 release predates Unity 6 support; it is not this candidate. The auto-generated source ZIP does not contain a compiled plugin. [Releases](../../releases)
-6. Extract the ZIP's `BepInEx` folder into the game folder. The files should land here.
+5. Build the Unity 6 ZIP from source as described below. A GitHub source ZIP contains the project files needed to build it.
+6. Copy `payload/InfiniteRotator.dll` from the compiled Uplink ZIP to `BepInEx/plugins/InfiniteRotator/`. For the separate older-target ZIP, extract its `BepInEx` folder into the game folder.
 
    ```text
    Starship EVO/
@@ -71,7 +78,7 @@ To update, close the game and replace `BepInEx/plugins/InfiniteRotator/InfiniteR
 ## How to uninstall
 
 1. Back up your world and remove the Infinite Rotator blocks from any saves or blueprints you want to keep using without the mod.
-2. Close the game and delete `BepInEx/plugins/InfiniteRotator/`.
+2. Close the game. Remove the package through Uplink if it manages the installation. For a manual installation, remove `BepInEx/plugins/InfiniteRotator/`.
 3. Optionally delete `BepInEx/config/local.sevo.infiniterotator.cfg`.
 
 ---

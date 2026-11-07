@@ -1,5 +1,15 @@
 # Compatibility candidate 0.1.1 — 6 November 2026
 
+## Uplink and Keel integration in 0.1.2
+
+The native Uplink package uses the existing `local.sevo.infiniterotator` identity. The manifest records the repository and compiled asset name. Brick IDs are configurable, so the manifest leaves fixed ID claims empty. The plugin checks both selected slots against the actual game registry before registration.
+
+Keel 0.1.0 supports stock hull registration through its preview API. Infinite Rotator uses its own controller and paired brick definitions. Its resource postfix runs after Keel's hook, and the plugin retains its existing numeric IDs and save format. Keel is an optional BepInEx dependency for load order. The package contains the rotator DLL and Uplink provides the Keel runtime.
+
+Validation on **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, used **Uplink 0.1.2** and its bundled **Keel 0.1.0**. The bundled Keel DLLs match the published Keel ZIP. The Unity 6 build compiled cleanly, the rotation/save policy checks passed, and Uplink imported, installed and validated the package in a dedicated profile. In-game startup and gameplay acceptance are pending.
+
+## Original 0.1.1 compatibility work
+
 Target: **Steam build ID 26451593 / 26w45a**, Unity **6000.6.6f1**, `unity6` branch. Confirmed using the installed Steam manifest, Steam's branch cache and the [developer's 26w45a release post](https://github.com/tsunamayo/Starship-EVO/issues/8106). Steam's public and experimental branches still report build 26122752 in the cache checked for this work.
 
 The candidate replaces the original whole-assembly hash rejection with feature-specific admission checks:

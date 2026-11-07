@@ -11,10 +11,12 @@ using VoxelEngine;
 
 namespace InfiniteRotator
 {
-    [BepInPlugin(Id, "Infinite Rotator (candidate)", "0.1.1")]
+    [BepInPlugin(Id, "Infinite Rotator", "0.1.2")]
+    [BepInDependency(KeelId, BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class Plugin : BaseUnityPlugin
     {
         public const string Id = "local.sevo.infiniterotator";
+        internal const string KeelId = "local.sevo.modplatform";
         internal static ManualLogSource Log;
         private static int blockId;
         // The runtime loader identifies stock materials by load order, not by texture path.
@@ -214,6 +216,7 @@ namespace InfiniteRotator
     }
 
     [HarmonyPatch(typeof(Brick), nameof(Brick.LoadAllResourcesRuntime), new Type[0])]
+    [HarmonyAfter(Plugin.KeelId)]
     internal static class RegisterBlockPatch
     {
         private static void Postfix() => Plugin.Register();
