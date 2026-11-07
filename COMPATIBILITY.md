@@ -6,7 +6,7 @@ The native Uplink package uses the existing `local.sevo.infiniterotator` identit
 
 Keel 0.1.0 supports stock hull registration through its preview API. Infinite Rotator uses its own controller and paired brick definitions. Its resource postfix runs after Keel's hook, and the plugin retains its existing numeric IDs and save format. Keel is an optional BepInEx dependency for load order. The package contains the rotator DLL and Uplink provides the Keel runtime.
 
-Validation on **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, used **Uplink 0.1.2** and its bundled **Keel 0.1.0**. The bundled Keel DLLs match the published Keel ZIP. The Unity 6 build compiled cleanly, the rotation/save policy checks passed, and Uplink imported, installed and validated the package in a dedicated profile. In-game startup and gameplay acceptance are pending.
+Validation on **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, used **Uplink 0.1.2** and its bundled **Keel 0.1.0**. The bundled Keel DLLs match the published Keel ZIP. The Unity 6 build compiled cleanly, the rotation/save policy checks passed, and Uplink imported, installed and validated the package in a dedicated profile. In an isolated Uplink launch session, Keel reported resource readiness in audit mode and Infinite Rotator registered at brick ID 1000. World and gameplay acceptance remain pending.
 
 ## Original 0.1.1 compatibility work
 

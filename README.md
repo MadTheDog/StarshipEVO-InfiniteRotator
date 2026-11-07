@@ -24,6 +24,7 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 
 ### What was tested
 
+- v0.1.2 imported and installed through Uplink 0.1.2. In an isolated Unity 6 startup, Keel 0.1.0 reached resource readiness and Infinite Rotator registered. Gameplay testing for v0.1.2 remains pending.
 - Candidate v0.1.1: contract and mutation checks against the installed Unity 6 game and the preserved Unity 2019 assembly, plus standalone Mono reflection probes and rotation/save policy tests. These checks do not launch or play the game. See [compatibility details](COMPATIBILITY.md).
 - Basic placement, continuous rotation and base painting in a disposable single-player installation. The white-top revision loaded in the same test copy.
 - An earlier build ran for about **7½ hours** in a world with four Infinite Rotators. At comparable workloads, frame times stayed near **11.3 ms** **(88,5 FPS)** and memory showed no sustained growth.
