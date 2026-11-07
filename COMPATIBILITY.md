@@ -1,5 +1,11 @@
 # Compatibility candidate 0.1.1 — 6 November 2026
 
+## Keel 0.1.2 validation baseline
+
+Infinite Rotator 0.1.2 passed isolated import, installation and startup on **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, Windows x64 Mono, with **Uplink 0.1.2** provisioning the published **Keel 0.1.2** runtime. The two installed Keel DLLs matched the checksum-verified SDK and runtime archives. Keel reached resource readiness in audit mode and Infinite Rotator registered at its default brick ID 1000. World placement, rotation, and save reload were outside this startup check. [Keel 0.1.2 experimental prerelease](https://github.com/MadTheDog/Starship-Keel/releases/tag/v0.1.2)
+
+The generic actuator API is separate from the rotator's paired brick definitions and native mechanical lifecycle. Infinite Rotator still uses its existing BepInEx integration, saved IDs and payload format. Keel remains a soft load-order dependency, so the existing mod ZIP can be used with the updated runtime.
+
 ## Uplink and Keel integration in 0.1.2
 
 The native Uplink package uses the existing `local.sevo.infiniterotator` identity. The manifest records the repository and compiled asset name. Brick IDs are configurable, so the manifest leaves fixed ID claims empty. The plugin checks both selected slots against the actual game registry before registration.
