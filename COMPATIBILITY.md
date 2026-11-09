@@ -1,5 +1,11 @@
 # Compatibility candidate 0.1.1 — 6 November 2026
 
+## Uplink release 0.1.3
+
+On 9 November 2026, **Uplink 0.1.6** used **Add from GitHub** with `MadTheDog/StarshipEVO-InfiniteRotator` to discover stable release **v0.1.3**, download `InfiniteRotator-v0.1.3-uplink.zip`, and install and validate it in an isolated profile. The downloaded ZIP matched the published package byte for byte. [Release v0.1.3](https://github.com/MadTheDog/StarshipEVO-InfiniteRotator/releases/tag/v0.1.3)
+
+The build and profile targeted **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, with the official **Keel 0.1.8** runtime. The build completed with zero warnings or errors and the rotation/save policy checks passed. The distribution update retains the rotator's existing gameplay code and saved IDs. Startup with Keel 0.1.8 and gameplay remain unverified for 0.1.3.
+
 ## Keel 0.1.2 validation baseline
 
 Infinite Rotator 0.1.2 passed isolated import, installation and startup on **Steam build 26451593 / 26w45a**, Unity **6000.6.6f1**, Windows x64 Mono, with **Uplink 0.1.2** provisioning the published **Keel 0.1.2** runtime. The two installed Keel DLLs matched the checksum-verified SDK and runtime archives. Keel reached resource readiness in audit mode and Infinite Rotator registered at its default brick ID 1000. World placement, rotation, and save reload were outside this startup check. [Keel 0.1.2 experimental prerelease](https://github.com/MadTheDog/Starship-Keel/releases/tag/v0.1.2)
