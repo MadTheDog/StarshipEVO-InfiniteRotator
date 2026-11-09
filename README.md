@@ -1,6 +1,6 @@
-# Infinite Rotator v0.1.2
+# Infinite Rotator v0.1.3
 
-The Unity 6 build provides a native Starship Uplink package. The current validation target is **Steam build 26451593 / 26w45a**, **Uplink 0.1.2** and **Keel 0.1.2**. See [compatibility details](COMPATIBILITY.md).
+The Unity 6 build is packaged for Starship Uplink. The current target is **Steam build 26451593 / 26w45a**, **Uplink 0.1.6** and **Keel 0.1.8**. [Compatibility details](COMPATIBILITY.md)
 
 ---
 
@@ -43,8 +43,8 @@ The game reduces speed under load and can stop the rotator on contact or overloa
 
 ## Install with Uplink
 
-1. Close Starship EVO and select a Unity 6 profile in Starship Uplink. For the Keel 0.1.2 baseline, extract the two DLLs from `Starship-Keel-0.1.2.zip` into the Uplink installation's `framework/` directory, replacing the bundled 0.1.0 DLLs, then use Uplink's runtime preparation action. The bundled runtime also passed the earlier startup check. [Uplink 0.1.2](https://github.com/MadTheDog/Starship-Uplink/releases/tag/v0.1.2) · [Keel 0.1.2](https://github.com/MadTheDog/Starship-Keel/releases/tag/v0.1.2)
-2. Build the mod with `./Build.ps1 -GameDir "<your Starship EVO folder>"` or use a compiled `InfiniteRotator-v0.1.2-uplink.zip`. Use Uplink's ZIP import to add the package, then install **Infinite Rotator 0.1.2** in the selected profile.
+1. Close Starship EVO, select a Unity 6 profile in Uplink, and choose **Prepare game**. Use Uplink's Keel update action to install Keel 0.1.8. [Uplink 0.1.6](https://github.com/MadTheDog/Starship-Uplink/releases/tag/v0.1.6) · [Keel 0.1.8](https://github.com/MadTheDog/Starship-Keel/releases/tag/v0.1.8)
+2. Choose **Add from GitHub** and enter `MadTheDog/StarshipEVO-InfiniteRotator`. Select `InfiniteRotator-v0.1.3-uplink.zip`, then install **Infinite Rotator 0.1.3** in the selected profile. [GitHub release](https://github.com/MadTheDog/StarshipEVO-InfiniteRotator/releases/tag/v0.1.3)
 3. For an upgrade from a manual installation, remove the older DLL from `BepInEx/plugins/InfiniteRotator/` while the game is closed. Keep `BepInEx/config/local.sevo.infiniterotator.cfg` and its existing brick ID.
 4. Launch from Uplink and look under **Mechanisms**. Keel's default audit mode is sufficient.
 
@@ -60,7 +60,7 @@ The game reduces speed under load and can stop the rotator on contact or overloa
    HideManagerGameObject = true
    ```
 
-5. Build the Unity 6 ZIP from source as described below. A GitHub source ZIP contains the project files needed to build it.
+5. Download `InfiniteRotator-v0.1.3-uplink.zip` from the release assets or build it from source. [GitHub release](https://github.com/MadTheDog/StarshipEVO-InfiniteRotator/releases/tag/v0.1.3)
 6. Copy `payload/InfiniteRotator.dll` from the compiled Uplink ZIP to `BepInEx/plugins/InfiniteRotator/`. For the separate older-target ZIP, extract its `BepInEx` folder into the game folder.
 
    ```text

@@ -11,7 +11,7 @@ using VoxelEngine;
 
 namespace InfiniteRotator
 {
-    [BepInPlugin(Id, "Infinite Rotator", "0.1.2")]
+    [BepInPlugin(Id, "Infinite Rotator", "0.1.3")]
     [BepInDependency(KeelId, BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class Plugin : BaseUnityPlugin
     {
